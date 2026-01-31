@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Favorite Person ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-pink: #ff4d6d;
+            --glass: rgba(255, 255, 255, 0.2);
+            --text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffafbd 0%, #ffc3a0 100%);
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        /* Floating background hearts */
+        .bg-heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.4);
+            animation: floatBG 10s infinite linear;
+            z-index: 0;
+            user-select: none;
+        }
+
+        @keyframes floatBG {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Main Container */
+        #main-card {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            width: 85%;
+            max-width: 450px;
+            z-index: 10;
+            transition: all 0.5s ease-in-out;
+        }
+
+        h1 {
+            color: white;
+            text-shadow: var(--text-shadow);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            min-height: 100px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            min-height: 60px;
+            position: relative;
+        }
+
+        button {
+            padding: 15px 35px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        #yes-btn {
+            background: var(--primary-pink);
+            color: white;
+            animation: heartbeat 2s infinite;
+        }
+
+        #no-btn {
+            background: white;
+            color: var(--primary-pink);
+        }
+
+        /* Heart & Message Animations */
+        .mega-heart {
+            font-size: 80px;
+            display: block;
+            margin: 20px 0;
+            animation: heartbeat 1.2s infinite;
+        }
+
+        .special-phrase {
+            display: block;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary-pink);
+            letter-spacing: 2px;
+            margin-top: 10px;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .flower {
+            position: absolute;
+            pointer-events: none;
+            animation: fall 4s linear forwards;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-card">
+        <h1 id="text-display">Heyyy... <br> Welcome to my place! ❤️</h1>
+        <div class="btn-group" id="btn-group">
+            <button id="yes-btn" onclick="nextStep(0)">Enter</button>
+        </div>
+    </div>
+
+    <script>
+        // Background decoration
+        for(let i=0; i<15; i++) {
+            let bgh = document.createElement('div');
+            bgh.className = 'bg-heart';
+            bgh.innerHTML = '❤️';
+            bgh.style.left = Math.random() * 100 + 'vw';
+            bgh.style.animationDuration = (Math.random() * 5 + 7) + 's';
+            document.body.appendChild(bgh);
+        }
+
+        let step = 0;
+        const textDisplay = document.getElementById('text-display');
+        const btnGroup = document.getElementById('btn-group');
+
+        function updateUI(text, buttonsHTML) {
+            textDisplay.style.opacity = 0;
+            setTimeout(() => {
+                textDisplay.innerHTML = text;
+                textDisplay.style.opacity = 1;
+                btnGroup.innerHTML = buttonsHTML;
+            }, 400);
+        }
+
+        function nextStep(choice) {
+            step++;
+
+            if (step === 1) {
+                updateUI("Do you know what is coming?", `
+                    <button id="yes-btn" onclick="nextStep('yes')">Yes!</button>
+                    <button id="no-btn" onclick="nextStep('no')">No?</button>
+                `);
+            } 
+            else if (step === 2) {
+                if (choice === 'yes') {
+                    updateUI("Ohh woww! <br> You're always so smart...", "");
+                } else {
+                    updateUI("Sad... <br> February is coming...", "");
+                }
+                setTimeout(askValentine, 3500);
+            }
+        }
+
+        function askValentine() {
+            updateUI("Wait... I think Valentine's Day is near... 🌹", "");
+            setTimeout(() => {
+                updateUI("Will you be my Valentine?", `
+                    <button id="yes-btn" onclick="celebrate()">YES!</button>
+                    <button id="no-btn" onmouseover="moveNoButton(this)">No</button>
+                `);
+            }, 3500);
+        }
+
+        function moveNoButton(btn) {
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 50);
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function celebrate() {
+            const finalMsg = `
+                <div style="text-align: left; font-size: 1rem; font-weight: normal; line-height: 1.5;">
+                    My Dearest Saanu,<br><br>
+                    You make every day feel like a dream. Thank you for being the most amazing part of my life. I love you more than words can express!<br>
+                </div>
+                <span class="mega-heart">❤️</span>
+                <span class="special-phrase">ILOVEYOUSAANU</span>
+            `;
+            updateUI(finalMsg, "");
+            setInterval(createFlower, 200);
+        }
+
+        function createFlower() {
+            const sym = ['🌹', '🌸', '🌷', '💖', '✨'];
+            const f = document.createElement('div');
+            f.className = 'flower';
+            f.innerHTML = sym[Math.floor(Math.random() * sym.length)];
+            f.style.left = Math.random() * 100 + 'vw';
+            f.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(f);
+            setTimeout(() => f.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
