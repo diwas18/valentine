@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Story | Valentine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff0f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            /* Prevents scrollbars during the "No" button game */
+            overflow: hidden; 
+        }
+
+        /* --- Showering Animation --- */
+        .particle {
+            position: fixed;
+            top: -10%;
+            z-index: 999;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
+
+        /* --- Layout Container --- */
+        .container {
+            width: 90%;
+            max-width: 1000px;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            padding: 20px 0;
+        }
+
+        .page { display: none; width: 100%; animation: fadeIn 1.5s ease; }
+        
+        /* Flex direction changes to column on mobile via Media Query below */
+        #memory-page { 
+            display: flex; 
+            gap: 20px; 
+            flex-direction: row; 
+            align-items: stretch; 
+        }
+
+        /* --- Left Side: Letter --- */
+        .letter-paper {
+            flex: 1.2;
+            background: #fdfcf0;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid #e0d8c0;
+            text-align: left;
+            position: relative;
+        }
+
+        .letter-paper::before {
+            content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 1px solid #d63384; pointer-events: none;
+        }
+
+        h1 { font-family: 'Dancing Script', cursive; color: #d63384; font-size: 2.2rem; margin-top: 0; }
+        
+        .long-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.3rem;
+            line-height: 1.4;
+            color: #444;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* --- Right Side: Photo Grid --- */
+        .photo-grid {
+            flex: 0.8;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 10px;
+            min-height: 400px;
+        }
+
+        .grid-box {
+            background: white;
+            border: 5px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .grid-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0; left: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .grid-box img.active { opacity: 1; }
+
+        /* --- Controls --- */
+        .btn-container { 
+            margin-top: 20px; 
+            text-align: center; 
+            position: relative; 
+            min-height: 60px; /* Space for buttons */
+        }
+        
+        button {
+            padding: 12px 25px; font-size: 1rem; border-radius: 50px; border: none;
+            cursor: pointer; font-weight: bold; transition: 0.3s;
+            touch-action: manipulation;
+        }
+        #next-btn, #yes-btn { background: #ff4d6d; color: white; }
+        
+        /* Fixed position for the No button to allow global movement */
+        #no-btn { 
+            background: #888; 
+            color: white; 
+            position: fixed; 
+            z-index: 1000;
+        }
+
+        /* --- Mobile Responsive Overrides --- */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; align-items: flex-start; }
+            .container { padding-top: 40px; }
+            #memory-page { flex-direction: column-reverse; } /* Photos on top for mobile looks better */
+            .photo-grid { min-height: 300px; height: 300px; }
+            h1 { font-size: 1.8rem; }
+            .long-message { font-size: 1.1rem; max-height: 200px; }
+            .letter-paper { padding: 20px; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="memory-page" class="page" style="display: flex;">
+            <div class="letter-paper">
+                <h1>To My Forever Valentine...</h1>
+                <div class="long-message">
+                    My Dearest,<br><br>
+                    Looking back at these photos, I’m reminded of how every single moment with you is a treasure. From the first time we laughed together to the quiet moments we share, you have become my favorite part of every day. <br><br>
+                    They say you only fall in love once, but that can't be true, because I fall in love with you all over again every time I see your smile.<br><br>
+                    Thank you for being you. I wanted to make this day as special as you are to me...
+                </div>
+                <div class="btn-container">
+                    <button id="next-btn" onclick="showQuestion()">I have one more thing...</button>
+                </div>
+            </div>
+
+            <div class="photo-grid">
+                <div class="grid-box" id="box1"><img src="photos/image1.jpeg" class="active"><img src="photos/image2.jpeg"><img src="photos/image3.jpeg"></div>
+                <div class="grid-box" id="box2"><img src="photos/image4.jpeg" class="active"><img src="photos/image5.jpeg"><img src="photos/image6.jpeg"></div>
+                <div class="grid-box" id="box3"><img src="photos/image7.jpeg" class="active"><img src="photos/image8.jpeg"><img src="photos/image9.jpeg"></div>
+                <div class="grid-box" id="box4"><img src="photos/image10.jpeg" class="active"><img src="photos/image11.jpeg"><img src="photos/image12.jpeg"></div>
+            </div>
+        </div>
+
+        <div id="question-page" class="page">
+            <div class="letter-paper" style="text-align: center;">
+                <h1>Wait! One more question...</h1>
+                <p>I have a special surprise planned. Do you want to see what's next? 🥰</p>
+                <div class="btn-container">
+                    <button id="yes-btn" onclick="showDetails()">YES! Show me!</button>
+                    <button id="no-btn" onmouseover="moveNoButton()" onclick="moveNoButton()">No</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="details-page" class="page">
+            <div class="letter-paper" style="text-align: center;">
+                <h1>Our Valentine's Date 🌹</h1>
+                <div style="font-size: 1.1rem; line-height: 1.6;">
+                    <p><strong>Dress Code:</strong> Whatever you year you look stunning</p>
+                    <p><strong>Time:</strong> 11:00 AM Sharp</p>
+                    <p><strong>Location:</strong> A mystery destination... 🤫</p>
+                    <p style="font-family: 'Dancing Script'; font-size: 1.8rem; margin-top: 20px;">I'll see you then, My Love.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Showering Hearts & Flowers
+        function createParticle() {
+            const particles = ['❤️', '🌸', '🌹', '💖', '🌷'];
+            const p = document.createElement('div');
+            p.classList.add('particle');
+            p.innerText = particles[Math.floor(Math.random() * particles.length)];
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            p.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            document.body.appendChild(p);
+            setTimeout(() => { p.remove(); }, 5000);
+        }
+        setInterval(createParticle, 400);
+
+        // Grid Photo Logic
+        function cycleGrid(boxId, interval) {
+            const images = document.querySelectorAll(`#${boxId} img`);
+            if(images.length === 0) return;
+            let index = 0;
+            setInterval(() => {
+                images[index].classList.remove('active');
+                index = (index + 1) % images.length;
+                images[index].classList.add('active');
+            }, interval);
+        }
+
+        cycleGrid('box1', 3000);
+        cycleGrid('box2', 3500);
+        cycleGrid('box3', 4000);
+        cycleGrid('box4', 2500);
+
+        // Navigation
+        function showQuestion() {
+            document.getElementById('memory-page').style.display = 'none';
+            document.getElementById('question-page').style.display = 'block';
+        }
+
+        function showDetails() {
+            document.getElementById('question-page').style.display = 'none';
+            document.getElementById('details-page').style.display = 'block';
+            // Hide the No button if it's still floating around
+            document.getElementById('no-btn').style.display = 'none';
+        }
+
+        function moveNoButton() {
+            const btn = document.getElementById('no-btn');
+            // Ensure button doesn't go off edge of mobile screen
+            const padding = 20;
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - padding);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - padding);
+            
+            btn.style.left = Math.max(padding, x) + 'px';
+            btn.style.top = Math.max(padding, y) + 'px';
+        }
+    </script>
+</body>
+</html>
